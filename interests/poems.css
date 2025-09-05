@@ -1,0 +1,172 @@
+/* ---------------------------------- */
+/*   "Back to Main Page"           */
+/* ---------------------------------- */
+.back-to-home {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    color: #007bff; 
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.back-to-home:hover {
+    opacity: 0.8;
+}
+
+body.dark .back-to-home {
+    color: #58a6ff; 
+}
+
+/* ---------------------------------- */
+/*  Wrappers & Layout (Các khung)     */
+/* ---------------------------------- */
+
+/* ---  (Light Mode) --- */
+.poem-list-wrapper,
+#poem-content-area {
+    background-color: #ffffff;
+    border: 1px solid #e1e4e8; 
+    color: #24292e; 
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+hr {
+    background-color: #e1e4e8;
+}
+
+/* --- Dark Mode --- */
+body.dark .poem-list-wrapper,
+body.dark #poem-content-area {
+    background-color: #22272e; 
+    border-color: #444c56;     
+    color: #c9d1d9;           
+}
+
+body.dark hr {
+    background-color: #444c56;
+}
+
+/* ---------------------------------- */
+/*  Poem List  */
+/* ---------------------------------- */
+
+.poem-list-title {
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid; /* Màu sẽ được kế thừa từ .poem-list-wrapper */
+    border-color: inherit;
+    font-weight: 500;
+}
+
+.list-group-item {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    border-left: 4px solid transparent;
+    color: inherit; /* Kế thừa màu chữ từ .poem-list-wrapper */
+}
+
+/* Hiệu ứng di chuột */
+body.dark .list-group-item:hover {
+    background-color: rgba(177, 186, 196, 0.07) !important;
+}
+
+.list-group-item:hover {
+    background-color: rgba(200, 200, 200, 0.2) !important;
+}
+
+/* Khi một mục được chọn */
+.list-group-item.active {
+    font-weight: 600;
+    color: #007bff !important;
+    background-color: transparent !important;
+    border-left-color: #007bff;
+}
+
+body.dark .list-group-item.active {
+    color: #58a6ff !important;
+    border-left-color: #58a6ff;
+}
+
+/* ---------------------------------- */
+/*  Poem Content Typography           */
+/* ---------------------------------- */
+#poem-content-area h2 {
+    font-weight: 600;
+}
+
+.composition-context {
+    font-size: 0.9rem;
+    font-style: italic;
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+.poem-text {
+    font-family: 'Merriweather', serif;
+    font-size: 1.15rem;
+    line-height: 2;
+    white-space: pre-wrap;
+}
+
+/* Placeholder */
+#poem-placeholder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.4;
+}
+
+/* //////////////// */
+
+/* --- Language Switcher Styles --- */
+#language-switcher .lang-btn {
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7); /* Màu chữ giống các menu item */
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0.5rem 0.5rem;
+    transition: color 0.2s;
+}
+
+#language-switcher .lang-btn:hover {
+    color: #fff; /* Sáng hơn khi hover */
+}
+
+/* Kiểu cho nút được chọn (active) */
+#language-switcher .lang-btn.active {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Dark mode compatibility */
+body.dark-mode #language-switcher .lang-btn {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-mode #language-switcher .lang-btn:hover,
+body.dark-mode #language-switcher .lang-btn.active {
+    color: #fff;
+}
+
+/* Light mode compatibility */
+body:not(.dark-mode) #language-switcher .lang-btn {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+body:not(.dark-mode) #language-switcher .lang-btn:hover,
+body:not(.dark-mode) #language-switcher .lang-btn.active {
+    color: #000;
+}
+body:not(.dark-mode) #language-switcher .text-white{
+    color: #000 !important;
+}

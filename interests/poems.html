@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tuyển Tập Thơ | Nin Nichi</title>
+
+    <!-- Google Fonts:  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --font-body: 'Lora', serif;
+            --font-ui: 'Lato', sans-serif;
+            /* Light Mode */
+            --color-bg: #f8f5f2;
+            --color-text: #3d3d3d;
+            --color-heading: #1e293b;
+            --color-panel-bg: #ffffff;
+            --color-accent: #3b82f6;
+            --color-border: #e2e8f0;
+            --color-subtle-bg: #f1f5f9;
+        }
+
+        body.dark {
+            /* Dark Mode */
+            --color-bg: #1e293b;
+            --color-text: #cbd5e1;
+            --color-heading: #f8fafc;
+            --color-panel-bg: #283446;
+            --color-accent: #60a5fa;
+            --color-border: #334155;
+            --color-subtle-bg: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-ui);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .page-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /*  menu toggle (hamburger)  mobile */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background-color: var(--color-panel-bg);
+            color: var(--color-heading);
+            border: 1px solid var(--color-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* (SIDEBAR)                                     */
+        .sidebar {
+            width: 300px;
+            background-color: var(--color-panel-bg);
+            border-right: 1px solid var(--color-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.25rem;
+            color: var(--color-heading);
+        }
+
+        .poem-list {
+            list-style: none;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .poem-list li {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .poem-list li:hover {
+            background-color: var(--color-subtle-bg);
+        }
+
+        .poem-list li.active {
+            background-color: var(--color-subtle-bg);
+            color: var(--color-accent);
+            font-weight: 700;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .sidebar-footer {
+            margin-top: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .action-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 0.75rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            transition: background-color 0.2s ease;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+            background-color: transparent;
+            color: var(--color-text);
+        }
+
+        .action-button.primary {
+            background-color: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+        }
+
+        .action-button:hover {
+            filter: brightness(1.1);
+        }
+
+        /* MAIN                             */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            align-items: flex-start;
+
+        }
+
+        .poem-container {
+            max-width: 100%;
+            text-align: center;
+        }
+
+
+        .poem-container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .poem-title {
+            font-family: var(--font-ui);
+            font-size: 2.0rem;
+            font-weight: 700;
+            color: var(--color-heading);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .poem-context {
+            font-family: var(--font-ui);
+            font-style: italic;
+            opacity: 0.7;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+.poem-body-wrapper {
+  display: flex;
+  justify-content: center; /* Khung thơ nằm giữa màn hình */
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.poem-body {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 2;
+  white-space: pre-line;    
+  text-align: left;         
+  max-width: 100%;
+}
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .content {
+                padding: 1.5rem;
+                padding-top: 5rem;
+                /* Tạo khoảng trống cho nút menu */
+            }
+
+            .poem-title {
+                font-size: 2rem;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="menu-toggle" id="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="page-container">
+        <div class="sidebar open" id="sidebar">
+            <div class="sidebar-header">
+                <h2 style="text-align: center;">Poetry Collection</h2>
+            </div>
+
+            <ul class="poem-list" id="poemList">
+                <!-- JavaScript sẽ điền danh sách vào đây -->
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="action-button" id="theme-toggle">
+                    <i class="fa-solid fa-moon"></i> Change Interface
+                </button>
+                <a class="action-button primary" href="../index.html">
+                    ← Back to Main Page
+                </a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="poem-display" class="poem-container">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', function (event) {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.querySelector('.menu-toggle');
+
+
+    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickToggle = toggleBtn.contains(event.target);
+
+        if (!isClickInsideSidebar && !isClickToggle) {
+            sidebar.classList.remove('open');
+        }
+    }
+});
+        document.addEventListener('DOMContentLoaded', () => {
+            const poemListEl = document.getElementById('poemList');
+            const poemDisplayEl = document.getElementById('poem-display');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const menuToggleBtn = document.getElementById('menu-toggle');
+            const sidebarEl = document.getElementById('sidebar');
+            const overlayEl = document.getElementById('overlay');
+
+const poems = {
+                poem1: { title: "Meow Meow", 
+                    context: "This poem was written as a cheerful reminder to live freely and happily — just like a cat. January, 2024", 
+                    body: `
+                            Meow meow meow meow, cat meow meow.
+                            Sometimes I look at myself.
+                            I want to be like a cat.
+                            No cry, no laugh, just meow meow.
+
+                            [meow...meow...]
+                            ----------- Nhat Ninh ----------
+                    ` },                
+                poem2: { title: "Ba Không Đói", 
+                    context: "Inspired by a moving scene between a father and his daughter at a local eatery, this poem reflects the quiet tenderness of a parent’s love — and brought back memories of my own father.  May, 2023", 
+                    body: `
+                                Ba không đói, thực sự ba không đói
+                                Ba đã ăn từ trước đó rồi mà
+                                Con gái nhỏ cứ ăn đi đừng hỏi
+                                Vì ba giờ, chỉ khát nước mà thôi
+
+                                Pa is full. Pa is not hungry
+                                Earlier, Pa ate already
+                                Little girl, don't worry 'bout Dad
+                                Cuz right now, Pa is just thirsty
+
+                                ----------- Nhat Ninh -----------
+                    ` },
+
+                poem4: { title: "If you could go back", 
+                    context: "This poem marks my farewell to twenty and my quiet first steps into twenty-one — a pause to reflect, and then move forward. November, 2023", 
+                    body: `
+                                        If you could go back
+                                        When you were twenty
+                                        and give you some tips
+                                        So what would that be?
+
+                                        If I were like that
+                                        I would give advice
+                                        Hey boy, just do it
+                                        You can, if you try
+
+                                        Many things go bad,
+                                        and that let you down
+                                        But when the rains pass
+                                        The sun will come out !!
+
+                                        ------ Nhat Ninh ------
+ 
+                `},
+
+                poem5: { title: "It's all my fault", 
+                    context: "This poem was written after I received a poor final exam result in one of my courses that semester — a consequence of focusing too much on external projects and competitions, and not enough on my studies. It’s a quiet apology to those who believed in me and supported me along the way.  July, 2023", 
+                    body: `
+                                It's my fault, it is all my fault.
+                                Cuz for me, it's not difficult.
+                                But I don't know what will come next.
+                                Many things bring me to a halt.
+
+                                It's my fault, it is all my fault.
+                                It happens and can't be controlled.
+                                I'm sorry, cuz I'm so useless.
+                                I tried but had no good results.
+
+                                I'm sorry, I will not explain.
+                                What reason, what happened, and then?
+                                If you know, maybe you'll be sad.
+                                I won't let that happen again.
+
+                                ----------- Nhat Ninh ------------
+
+                    ` },
+
+                poem6: { title: "I can feel the feeling you feel", 
+                    context: "This poem was written to encourage my friends during a long period of preparation and waiting for a competition — one that was delayed due to the COVID-19 pandemic and many challenges that followed.  October, 2023", 
+                    body: `
+                            I can feel the feeling you feel
+                            You have tried to practice your skills
+                            But a long time has confused us
+                            And we still wait for time to heal
+
+                            I can feel the feeling you feel
+                            Sometimes we wonder if it's real
+                            But maybe some problems came up
+                            That's why it still can't be revealed
+
+                            Keep going, no matter how far
+                            The night sky always has bright stars
+                            I believe that you're strong enough.
+                            Try your best and prove who you are !!
+
+                            ------------ Nhat Ninh -------------
+                    
+                    ` },
+
+                poem7: { title: "It's Ok not to be OK", 
+                    context: "This poem was written to comfort a friend after he failed the interview round for an internship at a company.  August, 2024", 
+                    body: `
+                                It's OK not to be OK. 
+                                As long as you don't stay that way.
+                                As long as you never give up.
+                                As long as you still keep and face.
+
+                                And fear is just temporary.
+                                You can be what you want to be.
+                                I always trust you can do it.
+                                Whatever it is... don't worry.
+
+                                ---------- Nhat Ninh ----------
+                        ` },
+
+
+
+                poem8: { title: "Because that is life", 
+                    context: "Written in the aftermath of deadlines, heavy projects, and quiet failures — this poem is a reminder to keep going, gently.  November, 2024", 
+                    body: `
+                                    Why haven't you slept?
+                                    It's already late.
+                                    because you can't sleep,
+                                    or... 
+                                    you're in a bad state?
+
+                                    some people say that:
+                                    you must be patient.
+                                    when one door closes,
+                                    another opens.
+
+                                    so no matter what,
+                                    even failure.
+                                    It is still not bad.
+                                    you can start over.
+
+                                    sometimes we feel good.
+                                    sometimes we're unfine.
+                                    but don't think too much.
+                                    because that is life.
+
+                                    ------- Nhat Ninh -------
+                    ` },
+
+
+                poem9: { title: "I am here", 
+                    context: "This poem was written to encourage my friends — to remind them that no matter what happens, I’ll always be here. April 2023", 
+                    body: `
+                                            If you're in crisis.
+                                            Please don’t hesitate.
+                                            Tell me about that,
+                                            I'll chase them away.
+                                                            
+                                            If life is so harsh,
+                                            Don't burst into tears.
+                                            Be strong, don't be sad.
+                                            Because I am here.
+
+                                            ------- Nhat Ninh -------
+                    
+                    ` },
+                poem10: { title: "Mom, don't worry", 
+                context: "This poem was written about the times I lied to my mother. Mom, don't worry. 2022", 
+                body: `
+                                        Today I am sick
+                                        I feel very cold,
+                                        and I have a cough,
+                                        and why? I don't know.
+
+                                        Then I cannot work
+                                        I have a headache
+                                        I feel quite tired
+                                        So I must delay.
+
+                                        My mom called me up.
+                                        She asked after me.
+                                        "Yes, I'm fine," I said.
+                                        "So you don't worry."
+
+                                        My mom told me that:
+                                        The weather's chilly.
+                                        And it's erratic.
+                                        Keep yourself healthy.
+
+                                        Yes, Mom. I know that.
+                                        I'll protect myself.
+                                        You don’t think too much.
+                                        I'm still in good health.
+
+                                        And the call ended.
+                                        After mom's goodbye.
+                                        I know that's not good.
+                                        But… I have to lie.
+
+                                        ------ Nhat Ninh ------
+                
+                ` },
+                poem11: { title: "youth trip", 
+                context: "This poem was written after a beach trip with my friends — a joyful escape to mark the end of a demanding semester filled with projects and exam. August 2024", 
+                body: `
+                            "- Hi, Ninh ơi...  my exam's finished.
+                            It’s time to relax with fresh air.
+                            We don't have any projects yet.
+                            Would you like to travel somewhere?"
+
+                            "- Oh, sounds good, I also like that.
+                            Traveling helps us be better.
+                            Let's tell the others in the group,
+                            Then we will travel together."
+
+                            And we had an exciting trip.
+                            We rode out of the big city
+                            To go to new peaceful places,
+                            To view the beauty of the sea.
+
+                            How much youth do we still have left?
+                            Ten years, or twenty years from now?
+                            Whatever happens, don't waste it.
+                            Be happy and love all around.
+
+                            So that one day, when we look back.
+                            Then reflect on the past journeys.
+                            You and I will not feel regret.
+                            Cuz we've lived our youth fully.
+
+                            ----------- Nhat Ninh ----------
+                
+                ` },
+
+                poem12: { title: "Một mình", 
+                context: "This poem was written during my time back in the countryside, on quiet nights spent alone, watching the moon and the stars.  2021", 
+                body: `
+                                Một mình thơ thẩn một mình ngồi
+                                Một mình tư lự, một lẻ loi
+                                Một mình vơ vẩn, cùng trời tối
+                                Một mình cứ thế... một mình thôi
+
+                                ---------- Nhat Ninh ----------
+                
+                ` }
+                
+            };
+            // Hàm mở/đóng menu mobile
+            function toggleMenu() {
+                sidebarEl.classList.toggle('open');
+                overlayEl.style.display = sidebarEl.classList.contains('open') ? 'block' : 'none';
+                menuToggleBtn.innerHTML = sidebarEl.classList.contains('open')
+                    ? '<i class="fa-solid fa-times"></i>'
+                    : '<i class="fa-solid fa-bars"></i>';
+            }
+
+            function showPoem(id) {
+                const poem = poems[id];
+                if (!poem) return;
+
+                poemDisplayEl.innerHTML = `
+  <div class="poem-title">${poem.title}</div>
+  <div class="poem-context">${poem.context}</div>
+  <div class="poem-body-wrapper">
+    <div class="poem-body">${poem.body}</div>
+  </div>
+`;
+
+
+
+                document.querySelectorAll('.poem-list li').forEach(li => {
+                    li.classList.toggle('active', li.dataset.poemId === id);
+                });
+                if (window.innerWidth <= 768 && sidebarEl.classList.contains('open')) {
+                    toggleMenu();
+                }
+            }
+
+            function initializePoemList() {
+                Object.keys(poems).forEach(id => {
+                    const li = document.createElement('li');
+                    li.textContent = poems[id].title;
+                    li.dataset.poemId = id;
+                    li.addEventListener('click', () => showPoem(id));
+                    poemListEl.appendChild(li);
+                });
+            }
+
+            function setTheme(theme) {
+                document.body.classList.toggle('dark', theme === 'dark');
+                localStorage.setItem('poem_theme', theme);
+                themeToggleBtn.querySelector('i').className = `fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`;
+            }
+
+            menuToggleBtn.addEventListener('click', toggleMenu);
+            overlayEl.addEventListener('click', toggleMenu);
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+
+
+            initializePoemList();
+            const savedTheme = localStorage.getItem('poem_theme') || 'dark';
+            setTheme(savedTheme);
+            const firstPoemId = Object.keys(poems)[0];
+            if (firstPoemId) {
+                showPoem(firstPoemId);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
