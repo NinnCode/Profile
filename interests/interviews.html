@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interviews | Nin Nichi</title>
+
+    <!-- Google Fonts:  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --font-body: 'Lora', serif;
+            --font-ui: 'Lato', sans-serif;
+            /* Light Mode */
+            --color-bg: #f8f5f2;
+            --color-text: #3d3d3d;
+            --color-heading: #1e293b;
+            --color-panel-bg: #ffffff;
+            --color-accent: #3b82f6;
+            --color-border: #e2e8f0;
+            --color-subtle-bg: #f1f5f9;
+        }
+
+        body.dark {
+            /* Dark Mode */
+            --color-bg: #1e293b;
+            --color-text: #cbd5e1;
+            --color-heading: #f8fafc;
+            --color-panel-bg: #283446;
+            --color-accent: #60a5fa;
+            --color-border: #334155;
+            --color-subtle-bg: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-ui);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .page-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /*  menu toggle (hamburger)  mobile */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background-color: var(--color-panel-bg);
+            color: var(--color-heading);
+            border: 1px solid var(--color-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* (SIDEBAR)                                     */
+        .sidebar {
+            width: 300px;
+            background-color: var(--color-panel-bg);
+            border-right: 1px solid var(--color-border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.25rem;
+            color: var(--color-heading);
+        }
+
+        .poem-list {
+            list-style: none;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .poem-list li {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .poem-list li:hover {
+            background-color: var(--color-subtle-bg);
+        }
+
+        .poem-list li.active {
+            background-color: var(--color-subtle-bg);
+            color: var(--color-accent);
+            font-weight: 700;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .sidebar-footer {
+            margin-top: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .action-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 0.75rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 700;
+            transition: background-color 0.2s ease;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border: 1px solid var(--color-border);
+            background-color: transparent;
+            color: var(--color-text);
+        }
+
+        .action-button.primary {
+            background-color: var(--color-accent);
+            color: white;
+            border-color: var(--color-accent);
+        }
+
+        .action-button:hover {
+            filter: brightness(1.1);
+        }
+
+        /* MAIN                             */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            align-items: flex-start;
+
+        }
+
+        .poem-container {
+            max-width: 100%;
+            text-align: center;
+        }
+
+
+        .poem-container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .poem-title {
+            font-family: var(--font-ui);
+            font-size: 2.0rem;
+            font-weight: 700;
+            color: var(--color-heading);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .poem-context {
+            font-family: var(--font-ui);
+            font-style: italic;
+            opacity: 0.7;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+.poem-body-wrapper {
+  display: flex;
+  justify-content: center; 
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.poem-body {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 2;
+  white-space: pre-line;    
+  text-align: left;         
+  max-width: 100%;
+}
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .content {
+                padding: 1.5rem;
+                padding-top: 5rem;
+                /* Tạo khoảng trống cho nút menu */
+            }
+
+            .poem-title {
+                font-size: 2rem;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+                transform: translateX(-100%);
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="menu-toggle" id="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="page-container">
+        <div class="sidebar open" id="sidebar">
+            <div class="sidebar-header">
+                <h2 style="text-align: center;">Interviews</h2>
+            </div>
+
+            <ul class="poem-list" id="poemList">
+                <!-- JavaScript sẽ điền danh sách vào đây -->
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="action-button" id="theme-toggle">
+                    <i class="fa-solid fa-moon"></i> Change Interface
+                </button>
+                <a class="action-button primary" href="../index.html">
+                    ← Back to Main Page
+                </a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="poem-display" class="poem-container">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', function (event) {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.querySelector('.menu-toggle');
+
+
+    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickToggle = toggleBtn.contains(event.target);
+
+        if (!isClickInsideSidebar && !isClickToggle) {
+            sidebar.classList.remove('open');
+        }
+    }
+});
+        document.addEventListener('DOMContentLoaded', () => {
+            const poemListEl = document.getElementById('poemList');
+            const poemDisplayEl = document.getElementById('poem-display');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const menuToggleBtn = document.getElementById('menu-toggle');
+            const sidebarEl = document.getElementById('sidebar');
+            const overlayEl = document.getElementById('overlay');
+
+const poems = {
+                poem1: { title: "Sharing from Prof. Min-Fu Hsieh and Prof. Chin-Lung Yang", 
+                    context: "These are some sharings from Prof. Min-Fu Hsieh and Prof. Chin-Lung Yang on IC design, including challenges, advice, and encouragement for students who wish to pursue a career in IC design and consider graduate studies at NCKU in Taiwan. [8/2024] ", 
+                    }, 
+
+            };
+            // Hàm mở/đóng menu mobile
+            function toggleMenu() {
+                sidebarEl.classList.toggle('open');
+                overlayEl.style.display = sidebarEl.classList.contains('open') ? 'block' : 'none';
+                menuToggleBtn.innerHTML = sidebarEl.classList.contains('open')
+                    ? '<i class="fa-solid fa-times"></i>'
+                    : '<i class="fa-solid fa-bars"></i>';
+            }
+
+            function showPoem(id) {
+                const poem = poems[id];
+                if (!poem) return;
+
+                poemDisplayEl.innerHTML = `
+  <div class="poem-title">${poem.title}</div>
+  <div class="poem-context">${poem.context}</div>
+<div class="video-wrapper" style="text-align: center; margin: 20px 0;">
+                                <iframe src="https://drive.google.com/file/d/1qN7Kc6ewb840eT9SkAF6EoMCabYhglYd/preview" width="100%" height="400" style="border:none; border-radius: 10px;" allowfullscreen></iframe>
+                            </div>
+`;
+
+
+
+                document.querySelectorAll('.poem-list li').forEach(li => {
+                    li.classList.toggle('active', li.dataset.poemId === id);
+                });
+                if (window.innerWidth <= 768 && sidebarEl.classList.contains('open')) {
+                    toggleMenu();
+                }
+            }
+
+            function initializePoemList() {
+                Object.keys(poems).forEach(id => {
+                    const li = document.createElement('li');
+                    li.textContent = poems[id].title;
+                    li.dataset.poemId = id;
+                    li.addEventListener('click', () => showPoem(id));
+                    poemListEl.appendChild(li);
+                });
+            }
+
+            function setTheme(theme) {
+                document.body.classList.toggle('dark', theme === 'dark');
+                localStorage.setItem('poem_theme', theme);
+                themeToggleBtn.querySelector('i').className = `fa-solid ${theme === 'dark' ? 'fa-sun' : 'fa-moon'}`;
+            }
+
+            menuToggleBtn.addEventListener('click', toggleMenu);
+            overlayEl.addEventListener('click', toggleMenu);
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = document.body.classList.contains('dark') ? 'light' : 'dark';
+                setTheme(newTheme);
+            });
+
+
+            initializePoemList();
+            const savedTheme = localStorage.getItem('poem_theme') || 'dark';
+            setTheme(savedTheme);
+            const firstPoemId = Object.keys(poems)[0];
+            if (firstPoemId) {
+                showPoem(firstPoemId);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
